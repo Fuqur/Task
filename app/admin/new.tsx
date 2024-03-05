@@ -11,19 +11,15 @@ type Book = {
 
 const NewBookPage: React.FC = () => {
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [cover, setCover] = useState("");
-  const [description, setDescription] = useState("");
+  const [book, setBook] = useState<Book>({
+    title: "",
+    author: "",
+    cover: "",
+    description: ""
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const book: Book = {
-      title,
-      author,
-      cover,
-      description,
-    };
     try {
       const res = await fetch(
         "https://crudcrud.com/api/c6ee99d6cfcb423da8aa3c918e72dd53",
@@ -45,6 +41,14 @@ const NewBookPage: React.FC = () => {
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setBook(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
   return (
     <Layout>
       <h1>Create a new book</h1>
@@ -53,9 +57,10 @@ const NewBookPage: React.FC = () => {
           <label htmlFor="title">Title</label>
           <input
             id="title"
+            name="title"
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={book.title}
+            onChange={handleChange}
             required
           />
         </div>
@@ -63,9 +68,10 @@ const NewBookPage: React.FC = () => {
           <label htmlFor="author">Author</label>
           <input
             id="author"
+            name="author"
             type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+            value={book.author}
+            onChange={handleChange}
             required
           />
         </div>
@@ -73,17 +79,19 @@ const NewBookPage: React.FC = () => {
           <label htmlFor="cover">Cover URL</label>
           <input
             id="cover"
+            name="cover"
             type="text"
-            value={cover}
-            onChange={(e) => setCover(e.target.value)}
+            value={book.cover}
+            onChange={handleChange}
           />
         </div>
         <div>
           <label htmlFor="description">Description</label>
           <textarea
             id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            name="description"
+            value={book.description}
+            onChange={handleChange}
           />
         </div>
         <button type="submit">Create</button>
