@@ -1,32 +1,34 @@
-import React, { useState } from 'react'
-import Layout from '@/app/components/layout'
-import Link from 'next/link'
-import styles from './Books.module.css'
+import { useState } from 'react';
+import Layout from '@/app/components/layout';
+import Link from 'next/link';
+import styles from './Books.module.css';
+import { GetServerSideProps } from 'next';
+import { fetchAllBooks } from '../api'; 
 
 type Book = {
-  _id: string
-  title: string
-  author: string
-  cover: string
-}
+  _id: string;
+  title: string;
+  author: string;
+  cover: string;
+};
 
 type Props = {
-  books: Book[]
-}
+  books: Book[];
+};
 
 export default function Books({ books }: Props) {
-  const [bookList, setBookList] = useState(books)
+  const [bookList, setBookList] = useState(books);
 
   const handleDelete = async (id: string) => {
     try {
       await fetch(`https://crudcrud.com/api/c6ee99d6cfcb423da8aa3c918e72dd53`, {
         method: 'DELETE',
-      })
-      setBookList(bookList.filter((book) => book._id !== id))
+      });
+      setBookList(bookList.filter((book) => book._id !== id));
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <Layout>
@@ -56,15 +58,21 @@ export default function Books({ books }: Props) {
         ))}
       </ul>
     </Layout>
-  )
+  );
 }
 
-export async function getStaticProps() {
-  const res = await fetch(`https://crudcrud.com/api/c6ee99d6cfcb423da8aa3c918e72dd53`)
-  const books = await res.json()
-  return {
-    props: {
-      books,
-    },
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const books = await fetchAllBooks();
+    return {
+      props: {
+        books,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    return {
+      notFound: true,
+    };
   }
-}
+};

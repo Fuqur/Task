@@ -1,18 +1,20 @@
-import React from 'react'
-import Layout from '../components/layout'
-import Link from 'next/link'
-import styles from './Books.module.css'
+import React from 'react';
+import Layout from '../components/layout';
+import Link from 'next/link';
+import styles from './Books.module.css';
+import { GetServerSideProps } from 'next';
+import { fetchAllBooks } from '../api'; 
 
 type Book = {
-  _id: string
-  title: string
-  author: string
-  cover: string
-}
+  _id: string;
+  title: string;
+  author: string;
+  cover: string;
+};
 
 type Props = {
-  books: Book[]
-}
+  books: Book[];
+};
 
 export default function Books({ books }: Props) {
   return (
@@ -34,15 +36,21 @@ export default function Books({ books }: Props) {
         ))}
       </ul>
     </Layout>
-  )
+  );
 }
 
-export async function getStaticProps() {
-  const res = await fetch(`https://crudcrud.com/api/c6ee99d6cfcb423da8aa3c918e72dd53`)
-  const books = await res.json()
-  return {
-    props: {
-      books,
-    },
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const books = await fetchAllBooks(); 
+    return {
+      props: {
+        books,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    return {
+      notFound: true,
+    };
   }
-}
+};
