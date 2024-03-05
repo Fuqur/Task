@@ -1,8 +1,8 @@
 import { GetServerSideProps } from 'next';
 import Layout from '../components/layout';
 import styles from './Book.module.css';
-import React, { useState } from 'react';
-import { updateBook } from '../api';
+import { useState } from 'react';
+import { updateBook,fetchBookById  } from '../api';
 
 type Book = {
   _id: string;
@@ -77,10 +77,10 @@ export default function EditBook({ book }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {
-    const res = await fetch(`https://crudcrud.com/api/c6ee99d6cfcb423da8aa3c918e72dd53`);
-    const book: Book = await res.json();
+    const bookId = query.id as string;
+    const book = await fetchBookById(bookId);
 
     return {
       props: {
