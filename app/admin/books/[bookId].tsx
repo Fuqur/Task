@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps<EditBookPageProps> = async (
 };
 
 const EditBookPage: React.FC<EditBookPageProps> = ({ book }) => {
-  return <div>Edit Book Page for book {book.title}</div>;
+  return <div>Edit Book Page {book.title}</div>;
 };
 
 export default EditBookPage;
