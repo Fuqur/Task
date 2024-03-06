@@ -1,19 +1,46 @@
-import axios from 'axios';
-import { NextApiRequest, NextApiResponse } from 'next';
+import React from 'react';
+import { GetServerSideProps } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'PUT') {
-    try {
-      await axios.put('https://crudcrud.com/api/c6ee99d6cfcb423da8aa3c918e72dd53', req.body);
-      res.status(200).json({ message: 'Book updated successfully' });
-    } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        res.status(error.response?.status || 500).json(error.response?.data || { message: 'Unknown error occurred' });
-      } else {
-        res.status(500).json({ message: 'Unknown error occurred' });
-      }
-    }
-  } else {
-    res.status(405).json({ message: 'Method Not Allowed' });
-  }
+interface Book {
+    id: string;
+    title: string;
+    author: string;
+    cover: string;
+    description: string;
 }
+
+interface EditBookPageProps {
+  book: Book;
+}
+
+export const getServerSideProps: GetServerSideProps<EditBookPageProps> = async (context) => {
+  const { bookId } = context.params as ParsedUrlQuery;
+  
+  if (!bookId) {
+    return {
+      notFound: true,
+    };
+  }
+
+  try {
+    const res = await fetch(`https://crudcrud.com/api/c6ee99d6cfcb423da8aa3c918e72dd53/`);
+    const book: Book = await res.json();
+    
+    return {
+      props: {
+        book,
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
+};
+
+const EditBookPage: React.FC<EditBookPageProps> = ({ book }) => {
+  return <div>Edit Book Page for book {book.title}</div>;
+};
+
+export default EditBookPage;
