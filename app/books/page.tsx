@@ -20,7 +20,7 @@ export async function getServerSideProps() {
   };
 }
 
-const BooksPage: React.FC<{ books: Book[] }> = ({ books }) => {
+const Page: React.FC<{ books: Book[] }> = ({ books }) => {
   return (
     <div>
       <h1>Books</h1>
@@ -35,4 +35,4 @@ const BooksPage: React.FC<{ books: Book[] }> = ({ books }) => {
   );
 };
 
-export default BooksPage;
+export default Page;
