@@ -1,5 +1,6 @@
 import React from 'react';
 import './HomePage.css';
+import Link from 'next/link';
 
 const HomePage = () => {
   return (
@@ -14,13 +15,17 @@ const HomePage = () => {
           <h2>Explore Books</h2>
           <p>Discover your next favorite book in our extensive library.</p>
           <img src="https://img.freepik.com/premium-photo/books-with-stairs-sky-with-cloudsgenerative-ai_391052-11895.jpg" alt=" image" style={{width: '25%'}} />
-          <button>Start Exploring</button>
+          <Link href="/books">
+            <button className="button-style">Start Exploring</button>
+          </Link>
         </section>
         <section className="home-section">
           <h2>Manage Books</h2>
           <p>Administer your book database with ease.</p>
           <img src="https://assets.brightspot.abebooks.a2z.com/dims4/default/880d935/2147483647/strip/true/crop/1580x760+0+0/resize/998x480!/quality/90/?url=http%3A%2F%2Fabebooks-brightspot.s3.us-west-2.amazonaws.com%2F5d%2Fe6%2F3c6a003a4374bac22e49620dc976%2Fcarousel-coffeetable-collection.png" alt=" image" style={{width: '25%'}} />
-          <button>Go to Admin</button>
+          <Link href="/admin/books">
+            <button className="button-style">Go to Admin</button>
+          </Link>
         </section>
         <section className="store-section">
           <h2>Download Our App</h2>
